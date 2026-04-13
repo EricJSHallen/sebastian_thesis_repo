@@ -24,3 +24,10 @@ BASH: git clone ...
 
 
 (if I put python stuff in here as well then I'll include it. maybe that way I can get graphs directly into my latex docs )
+
+
+## Version history
+
+version : Commit date : message
+v0.0 (dd/mm/yy) initial commit
+v1.0 (12/04/2026) commit updates made 10/"/" organisation of repo. .gitkeep to maintain strctr, readme.md, and tex tmplt.

@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.4.10)  10 APR 2026 16:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.4.10)  13 APR 2026 13:56
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/eric/Documents/thesis/sebastian_thesis_repo/weekly_presentation/wp_main.tex
-(/home/eric/Documents/thesis/sebastian_thesis_repo/weekly_presentation/wp_main.tex
+**/home/eric/Documents/thesis/sebastian_thesis_repo/weekly_presentation/wpmain.tex
+(/home/eric/Documents/thesis/sebastian_thesis_repo/weekly_presentation/wpmain.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
 (../templates/pres_template/cognigronbeamer.cls
@@ -851,41 +851,57 @@ File: microtype.cfg 2023/03/13 v3.1a microtype main configuration file (RS)
 ))
 \@clearance=\dimen295
 \realmargin=\dimen296
+) (/usr/share/texlive/texmf-dist/tex/latex/ragged2e/ragged2e.sty
+Package: ragged2e 2023/06/22 v3.6 ragged2e Package
+\CenteringLeftskip=\skip66
+\RaggedLeftLeftskip=\skip67
+\RaggedRightLeftskip=\skip68
+\CenteringRightskip=\skip69
+\RaggedLeftRightskip=\skip70
+\RaggedRightRightskip=\skip71
+\CenteringParfillskip=\skip72
+\RaggedLeftParfillskip=\skip73
+\RaggedRightParfillskip=\skip74
+\JustifyingParfillskip=\skip75
+\CenteringParindent=\skip76
+\RaggedLeftParindent=\skip77
+\RaggedRightParindent=\skip78
+\JustifyingParindent=\skip79
 )
-LaTeX Font Info:    Trying to load font information for T1+fav on input line 22.
+LaTeX Font Info:    Trying to load font information for T1+fav on input line 25.
  (/usr/share/texlive/texmf-dist/tex/latex/arev/t1fav.fd
 File: t1fav.fd 2006/05/30 Fontinst v1.929 font definitions for T1/fav.
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count338
 \l__pdf_internal_box=\box77
-) (./wp_main.aux)
-\openout1 = `wp_main.aux'.
+) (./wpmain.aux)
+\openout1 = `wpmain.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for MDA/cmr/m/n on input line 22.
-LaTeX Font Info:    Trying to load font information for MDA+cmr on input line 22.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for MDA/cmr/m/n on input line 25.
+LaTeX Font Info:    Trying to load font information for MDA+cmr on input line 25.
  (/usr/share/texlive/texmf-dist/tex/latex/mathdesign/mdacmr.fd
 File: mdacmr.fd 
 )
-LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    ... okay on input line 25.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -940,10 +956,10 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 22.
- (./wp_main.out) (./wp_main.out)
+Package hyperref Info: Link coloring OFF on input line 25.
+ (./wpmain.out) (./wpmain.out)
 \@outlinefile=\write5
-\openout5 = `wp_main.out'.
+\openout5 = `wpmain.out'.
 
  (/usr/share/texlive/texmf-dist/tex/latex/translator/translator-basic-dictionary-English.dict
 Dictionary: translator-basic-dictionary, Language: English 
@@ -958,12 +974,12 @@ Dictionary: translator-numbers-dictionary, Language: English
 ) (/usr/share/texlive/texmf-dist/tex/latex/translator/translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
-LaTeX Info: Redefining \microtypecontext on input line 22.
-Package microtype Info: Applying patch `item' on input line 22.
-Package microtype Info: Applying patch `toc' on input line 22.
-Package microtype Info: Applying patch `eqnum' on input line 22.
-Package microtype Info: Applying patch `footnote' on input line 22.
-Package microtype Info: Applying patch `verbatim' on input line 22.
+LaTeX Info: Redefining \microtypecontext on input line 25.
+Package microtype Info: Applying patch `item' on input line 25.
+Package microtype Info: Applying patch `toc' on input line 25.
+Package microtype Info: Applying patch `eqnum' on input line 25.
+Package microtype Info: Applying patch `footnote' on input line 25.
+Package microtype Info: Applying patch `verbatim' on input line 25.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -975,16 +991,16 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `fav' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- (./wp_main.nav)
+ (./wpmain.nav)
 <../templates/pres_template/header.png, id=17, 1316.66907pt x 118.94438pt>
 File: ../templates/pres_template/header.png Graphic file (type png)
 <use ../templates/pres_template/header.png>
-Package pdftex.def Info: ../templates/pres_template/header.png  used on input line 29.
+Package pdftex.def Info: ../templates/pres_template/header.png  used on input line 32.
 (pdftex.def)             Requested size: 271.0038pt x 24.48175pt.
 <../templates/pres_template/webheader.png, id=18, 1381.16pt x 325.215pt>
 File: ../templates/pres_template/webheader.png Graphic file (type png)
 <use ../templates/pres_template/webheader.png>
-Package pdftex.def Info: ../templates/pres_template/webheader.png  used on input line 29.
+Package pdftex.def Info: ../templates/pres_template/webheader.png  used on input line 32.
 (pdftex.def)             Requested size: 205.75305pt x 48.44766pt.
  [1
 
@@ -992,105 +1008,173 @@ Package pdftex.def Info: ../templates/pres_template/webheader.png  used on input
 <../templates/pres_template/logo.png, id=29, 519.44063pt x 150.5625pt>
 File: ../templates/pres_template/logo.png Graphic file (type png)
 <use ../templates/pres_template/logo.png>
-Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 33.
+Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 36.
 (pdftex.def)             Requested size: 120.44373pt x 34.91121pt.
  [2
 
  <../templates/pres_template/logo.png (PNG copy)>]
 File: ../templates/pres_template/logo.png Graphic file (type png)
 <use ../templates/pres_template/logo.png>
-Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 40.
+Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 42.
 (pdftex.def)             Requested size: 120.44373pt x 34.91121pt.
  [3
 
 ]
-LaTeX Font Info:    Trying to load font information for TS1+fav on input line 51.
-LaTeX Font Info:    No file TS1fav.fd. on input line 51.
-
-
-LaTeX Font Warning: Font shape `TS1/fav/m/n' undefined
-(Font)              using `TS1/cmr/m/n' instead
-(Font)              for symbol `textbullet' on input line 51.
-
-(/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-cmr.cfg
-File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
+LaTeX Font Info:    Trying to load font information for OT1+zavm on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/arev/ot1zavm.fd
+File: ot1zavm.fd 2006/05/30 Fontinst v1.929 font definitions for OT1/zavm.
 )
 Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `fav' (encoding: TS1).
+(microtype)             `zavm' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+Package microtype Info: Character `textendash ' is missing
+(microtype)             in font `OT1/zavm/m/n/10'.
+(microtype)             Ignoring protrusion settings for this character.
+Package microtype Info: Character `textemdash ' is missing
+(microtype)             in font `OT1/zavm/m/n/10'.
+(microtype)             Ignoring protrusion settings for this character.
+Package microtype Info: Character `textendash ' is missing
+(microtype)             in font `OT1/zavm/m/n/7.6'.
+(microtype)             Ignoring protrusion settings for this character.
+Package microtype Info: Character `textemdash ' is missing
+(microtype)             in font `OT1/zavm/m/n/7.6'.
+(microtype)             Ignoring protrusion settings for this character.
+Package microtype Info: Character `textendash ' is missing
+(microtype)             in font `OT1/zavm/m/n/6'.
+(microtype)             Ignoring protrusion settings for this character.
+Package microtype Info: Character `textemdash ' is missing
+(microtype)             in font `OT1/zavm/m/n/6'.
+(microtype)             Ignoring protrusion settings for this character.
+LaTeX Font Info:    Trying to load font information for OML+zavm on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/arev/omlzavm.fd
+File: omlzavm.fd 2006/05/30 Fontinst v1.929 font definitions for OML/zavm.
+)
+LaTeX Font Info:    Trying to load font information for OMS+zavm on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/arev/omszavm.fd
+File: omszavm.fd 2006/05/30 Fontinst v1.929 font definitions for OMS/zavm.
+)
+LaTeX Font Info:    Trying to load font information for OMX+mdbch on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/mathdesign/mdbch/omxmdbch.fd
+File: omxmdbch.fd 2013/08/29 Fontinst v1.933 font definitions for OMX/mdbch.
+)
+LaTeX Font Info:    Font shape `OMX/mdbch/m/n' will be
+(Font)              scaled to size 9.60007pt on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-bch.cfg
+File: mt-bch.cfg 2007/03/03 v1.5 microtype config. file: Bitstream Charter (RS)
+)
+LaTeX Font Info:    Font shape `OMX/mdbch/m/n' will be
+(Font)              scaled to size 7.29605pt on input line 55.
+LaTeX Font Info:    Font shape `OMX/mdbch/m/n' will be
+(Font)              scaled to size 5.76004pt on input line 55.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+)
+LaTeX Font Info:    Trying to load font information for MDA+mdbch on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/mathdesign/mdbch/mdamdbch.fd
+File: mdamdbch.fd 2013/08/29 Fontinst v1.933 font definitions for MDA/mdbch.
+)
+LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
+(Font)              scaled to size 9.60007pt on input line 55.
+LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
+(Font)              scaled to size 7.29605pt on input line 55.
+LaTeX Font Info:    Font shape `MDA/mdbch/b/n' will be
+(Font)              scaled to size 5.76004pt on input line 55.
+LaTeX Font Info:    Trying to load font information for U+zavm on input line 55.
+ (/usr/share/texlive/texmf-dist/tex/latex/arev/uzavm.fd
+File: uzavm.fd 2006/05/30 Fontinst v1.929 font definitions for U/zavm.
+)
+Package microtype Info: Fixing zero \fontdimen 6 for font `U/zavm/m/n/10'
+(microtype)             (new value: 10.0pt) on input line 55.
+Package microtype Info: Fixing zero \fontdimen 6 for font `U/zavm/m/n/7.6'
+(microtype)             (new value: 7.6pt) on input line 55.
+Package microtype Info: Fixing zero \fontdimen 6 for font `U/zavm/m/n/6'
+(microtype)             (new value: 6.0pt) on input line 55.
+Package microtype Info: Fixing zero \fontdimen 6 for font `U/zavm/m/it/10'
+(microtype)             (new value: 10.0pt) on input line 55.
+Package microtype Info: Fixing zero \fontdimen 6 for font `U/zavm/m/it/7.6'
+(microtype)             (new value: 7.6pt) on input line 55.
+Package microtype Info: Fixing zero \fontdimen 6 for font `U/zavm/m/it/6'
+(microtype)             (new value: 6.0pt) on input line 55.
+<DPI1eg.png, id=40, 311.66437pt x 210.03468pt>
+File: DPI1eg.png Graphic file (type png)
+<use DPI1eg.png>
+Package pdftex.def Info: DPI1eg.png  used on input line 55.
+(pdftex.def)             Requested size: 151.64792pt x 102.1968pt.
 File: ../templates/pres_template/logo.png Graphic file (type png)
 <use ../templates/pres_template/logo.png>
-Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 51.
+Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 55.
 (pdftex.def)             Requested size: 120.44373pt x 34.91121pt.
  [4
 
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-LaTeX Font Info:    Trying to load font information for T1+fvm on input line 60.
- (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
-File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `fvm' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/arev/arevoml.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/arev/arevot1.enc} <./DPI1eg.png (PNG copy)>]
 File: ../templates/pres_template/logo.png Graphic file (type png)
 <use ../templates/pres_template/logo.png>
-Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 60.
+Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 64.
 (pdftex.def)             Requested size: 120.44373pt x 34.91121pt.
  [5
 
 ]
 File: ../templates/pres_template/logo.png Graphic file (type png)
 <use ../templates/pres_template/logo.png>
-Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 60.
+Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 73.
 (pdftex.def)             Requested size: 120.44373pt x 34.91121pt.
  [6
 
 ]
 File: ../templates/pres_template/logo.png Graphic file (type png)
 <use ../templates/pres_template/logo.png>
-Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 60.
+Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 91.
 (pdftex.def)             Requested size: 120.44373pt x 34.91121pt.
  [7
 
-] [8
+]
+File: ../templates/pres_template/logo.png Graphic file (type png)
+<use ../templates/pres_template/logo.png>
+Package pdftex.def Info: ../templates/pres_template/logo.png  used on input line 104.
+(pdftex.def)             Requested size: 120.44373pt x 34.91121pt.
+ [8
 
 ]
 \tf@nav=\write6
-\openout6 = `wp_main.nav'.
+\openout6 = `wpmain.nav'.
 
 \tf@toc=\write7
-\openout7 = `wp_main.toc'.
+\openout7 = `wpmain.toc'.
 
 \tf@snm=\write8
-\openout8 = `wp_main.snm'.
+\openout8 = `wpmain.snm'.
 
- (./wp_main.aux)
+ (./wpmain.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
-Package rerunfilecheck Info: File `wp_main.out' has not changed.
-(rerunfilecheck)             Checksum: 91D82B7C2CCF42E86D7CCEDB784D05FB;86.
+Package rerunfilecheck Info: File `wpmain.out' has not changed.
+(rerunfilecheck)             Checksum: D280DFE8D7C2BCE0FA7267A1DF3CCC58;93.
  ) 
 Here is how much of TeX's memory you used:
- 23828 strings out of 474222
- 451317 string characters out of 5748733
- 1929975 words of memory out of 5000000
- 45585 multiletter control sequences out of 15000+600000
- 596650 words of font info for 58 fonts, out of 8000000 for 9000
+ 23980 strings out of 474222
+ 454328 string characters out of 5748733
+ 1930975 words of memory out of 5000000
+ 45688 multiletter control sequences out of 15000+600000
+ 598551 words of font info for 88 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 142i,15n,137p,1074b,545s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/arev/ArevSans-Roman.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/bera/fvmr8a.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb>
-Output written on wp_main.pdf (8 pages, 1167395 bytes).
+ 142i,15n,137p,1073b,521s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/arev/ArevSans-Oblique.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/arev/ArevSans-Roman.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbch/md-chb7t.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbch/md-chb7y.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbch/md-chr7v.pfb>
+Output written on wpmain.pdf (8 pages, 1187578 bytes).
 PDF statistics:
- 91 PDF objects out of 1000 (max. 8388607)
- 64 compressed objects within 1 object stream
+ 106 PDF objects out of 1000 (max. 8388607)
+ 73 compressed objects within 1 object stream
  18 named destinations out of 1000 (max. 500000)
- 6210 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 5191 words of extra memory for PDF output out of 10000 (max. 10000000)
 
