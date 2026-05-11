@@ -1,0 +1,88 @@
+; ============================================================
+; Minimal OCEAN test script
+; Test one pair of PWL files and export two output currents
+; ============================================================
+
+simulator('spectre)
+
+; ------------------------------------------------------------
+; Design under test
+; ------------------------------------------------------------
+
+design("sebastian_thesis_pilot" "dynapsetb1" "schematic")
+
+; ------------------------------------------------------------
+; Directory setup
+; ------------------------------------------------------------
+
+baseRepoDir = "/home/s5117909/Documents/thesis/sebastian_thesis_repo"
+
+pwlBaseDir = strcat(baseRepoDir "/processing/general_code/spike_train_output")
+
+outputBaseDir = strcat(baseRepoDir "/processing/cadence_extraction/output_data")
+
+; Put this particular test run in its own folder.
+runName = "test_st1_20hz_trial1_st2_80hz_trial1"
+runDir = strcat(outputBaseDir "/" runName)
+
+unless(isDir(outputBaseDir)
+    system(strcat("mkdir -p " outputBaseDir))
+)
+
+unless(isDir(runDir)
+    system(strcat("mkdir -p " runDir))
+)
+
+; This controls where the simulation result database is written.
+resultsDir(runDir)
+
+; ------------------------------------------------------------
+; Analysis
+; ------------------------------------------------------------
+
+analysis('tran ?stop "1s")
+
+; ------------------------------------------------------------
+; PWL design variables
+; ------------------------------------------------------------
+
+desVar("pwlFile_st1" strcat(pwlBaseDir "/st_1/20_hz/trial_1.pwl"))
+desVar("pwlFile_st2" strcat(pwlBaseDir "/st_2/80_hz/trial_1.pwl"))
+
+; ------------------------------------------------------------
+; Save requested currents
+; ------------------------------------------------------------
+; These should correspond to the same expressions you would use
+; in the ADE calculator / results browser.
+;
+; If these are terminal currents, this is the likely syntax:
+
+save('i "/I172/Iout")
+save('i "/I56/Iout")
+
+; ------------------------------------------------------------
+; Run simulation
+; ------------------------------------------------------------
+
+run()
+
+; ------------------------------------------------------------
+; Export selected current waveforms after simulation
+; ------------------------------------------------------------
+
+selectResult('tran)
+
+iout_172 = i("/I172/Iout")
+iout_56  = i("/I56/Iout")
+
+ocnPrint(
+    ?output strcat(runDir "/output_currents.txt")
+    ?precision 10
+    ?numSpaces 1
+    iout_172
+    iout_56
+)
+
+printf("Finished test run.\n")
+printf("Results directory: %s\n" runDir)
+printf("Exported currents: %s\n" strcat(runDir "/output_currents.txt"))
