@@ -32,7 +32,7 @@ unless(isDir(runDir)
     system(strcat("mkdir -p " runDir))
 )
 
-; Send Spectre result database to this directory. 
+; Send Spectre output data to this directory.
 resultsDir(runDir)
 
 ; ------------------------------------------------------------
@@ -42,11 +42,45 @@ resultsDir(runDir)
 analysis('tran ?stop "1s")
 
 ; ------------------------------------------------------------
+; Define ordinary design variables
+; ------------------------------------------------------------
+; These values are copied from your ADE design-variable list.
+; I am assigning the dependent variables directly to avoid
+; undefined-variable problems in the generated Spectre netlist.
+
+desVar("ml" 180n)
+desVar("mw" 180n)
+
+desVar("m2l"   180n)
+desVar("m2ltb" 180n)
+desVar("m2w"   180n)
+desVar("m2wtb" 180n)
+
+desVar("m3l" 180n)
+desVar("m3w" 180n)
+
+desVar("m4l"   180n)
+desVar("m4ltb" 180n)
+desVar("m4w"   180n)
+desVar("m4wtb" 180n)
+
+desVar("m5l" 180n)
+desVar("m5w" 180n)
+
+desVar("pw"   100u)
+desVar("T"    1m)
+desVar("Vin"  0)
+desVar("Vtau" 1.6)
+desVar("Vthr" 0.9)
+desVar("Vw"   0.5)
+desVar("vmax" 1.8)
+
+; ------------------------------------------------------------
 ; PWL design variables
 ; ------------------------------------------------------------
 ; Important:
-; The file paths need embedded quotation marks so Spectre receives
-; them as string parameters.
+; The actual Spectre parameter value must include quotation marks.
+; That is why the strings are wrapped with "\"" ... "\"".
 
 st1File = strcat(pwlBaseDir "/st_1/20_hz/trial_1.pwl")
 st2File = strcat(pwlBaseDir "/st_2/80_hz/trial_1.pwl")
@@ -68,6 +102,8 @@ printf("Using st_2 PWL file: %s\n" st2File)
 ; ------------------------------------------------------------
 ; Save requested currents
 ; ------------------------------------------------------------
+; If /I172/Iout and /I56/Iout are terminal-current expressions,
+; this is the appropriate save type.
 
 save('i "/I172/Iout")
 save('i "/I56/Iout")
