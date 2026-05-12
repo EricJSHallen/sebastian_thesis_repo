@@ -1,6 +1,7 @@
 ; ============================================================
-; Minimal OCEAN test script
-; Test one pair of PWL files and export two output currents
+; Batch OCEAN script
+; Iterate over all frequencies and trials in spike_train_output
+; Export I172/Iout, I56/Iout, /vpre, and /vpre1 for every run
 ; ============================================================
 
 simulator('spectre)
@@ -12,28 +13,21 @@ simulator('spectre)
 design("sebastian_thesis_pilot" "dynapsetb1" "schematic")
 
 ; ------------------------------------------------------------
-; Directory setup
+; Base directories
 ; ------------------------------------------------------------
 
 baseRepoDir = "/home/s5117909/Documents/thesis/sebastian_thesis_repo"
 
 pwlBaseDir = strcat(baseRepoDir "/processing/general_code/spike_train_output")
 
-outputBaseDir = strcat(baseRepoDir "/processing/cadence_extraction/output_data")
+st1BaseDir = strcat(pwlBaseDir "/st_1")
+st2BaseDir = strcat(pwlBaseDir "/st_2")
 
-runName = "test_st1_20hz_trial1_st2_80hz_trial1"
-runDir = strcat(outputBaseDir "/" runName)
+outputBaseDir = strcat(baseRepoDir "/processing/cadence_extraction/output_data")
 
 unless(isDir(outputBaseDir)
     system(strcat("mkdir -p " outputBaseDir))
 )
-
-unless(isDir(runDir)
-    system(strcat("mkdir -p " runDir))
-)
-
-; Send Spectre output data to this directory.
-resultsDir(runDir)
 
 ; ------------------------------------------------------------
 ; Analysis
@@ -44,9 +38,6 @@ analysis('tran ?stop "1s")
 ; ------------------------------------------------------------
 ; Define ordinary design variables
 ; ------------------------------------------------------------
-; These values are copied from your ADE design-variable list.
-; I am assigning the dependent variables directly to avoid
-; undefined-variable problems in the generated Spectre netlist.
 
 desVar("ml" 180n)
 desVar("mw" 180n)
@@ -76,61 +67,140 @@ desVar("Vw"   0.5)
 desVar("vmax" 1.8)
 
 ; ------------------------------------------------------------
-; PWL design variables
+; Save requested currents and voltages
 ; ------------------------------------------------------------
-; Important:
-; The actual Spectre parameter value must include quotation marks.
-; That is why the strings are wrapped with "\"" ... "\"".
-
-st1File = strcat(pwlBaseDir "/st_1/20_hz/trial_1.pwl")
-st2File = strcat(pwlBaseDir "/st_2/80_hz/trial_1.pwl")
-
-unless(isFile(st1File)
-    error("Cannot find st_1 PWL file: %s\n" st1File)
-)
-
-unless(isFile(st2File)
-    error("Cannot find st_2 PWL file: %s\n" st2File)
-)
-
-desVar("pwlFile_st1" strcat("\"" st1File "\""))
-desVar("pwlFile_st2" strcat("\"" st2File "\""))
-
-printf("Using st_1 PWL file: %s\n" st1File)
-printf("Using st_2 PWL file: %s\n" st2File)
-
-; ------------------------------------------------------------
-; Save requested currents
-; ------------------------------------------------------------
-; If /I172/Iout and /I56/Iout are terminal-current expressions,
-; this is the appropriate save type.
 
 save('i "/I172/Iout")
 save('i "/I56/Iout")
 
-; ------------------------------------------------------------
-; Run simulation
-; ------------------------------------------------------------
-
-run()
+save('v "/vpre")
+save('v "/vpre1")
 
 ; ------------------------------------------------------------
-; Export selected current waveforms after simulation
+; Manifest file
 ; ------------------------------------------------------------
 
-selectResult('tran)
+manifestPath = strcat(outputBaseDir "/run_manifest.csv")
+manifestPort = outfile(manifestPath "w")
 
-iout_172 = i("/I172/Iout")
-iout_56  = i("/I56/Iout")
+fprintf(manifestPort "run_name,frequency_dir,trial_file,st1_file,st2_file,run_dir\n")
 
-ocnPrint(
-    ?output strcat(runDir "/output_currents.txt")
-    ?precision 10
-    ?numSpaces 1
-    iout_172
-    iout_56
+; ------------------------------------------------------------
+; Basic sanity checks
+; ------------------------------------------------------------
+
+unless(isDir(st1BaseDir)
+    error("Cannot find st_1 directory: %s\n" st1BaseDir)
 )
 
-printf("Finished test run.\n")
-printf("Results directory: %s\n" runDir)
-printf("Exported currents: %s\n" strcat(runDir "/output_currents.txt"))
+unless(isDir(st2BaseDir)
+    error("Cannot find st_2 directory: %s\n" st2BaseDir)
+)
+
+; ------------------------------------------------------------
+; Main batch loop
+; ------------------------------------------------------------
+
+freqDirs = getDirFiles(st1BaseDir)
+
+foreach(freqDir freqDirs
+
+    when(freqDir != "." && freqDir != ".."
+
+        st1FreqDir = strcat(st1BaseDir "/" freqDir)
+        st2FreqDir = strcat(st2BaseDir "/" freqDir)
+
+        if(isDir(st1FreqDir) && isDir(st2FreqDir) then
+
+            trialFiles = getDirFiles(st1FreqDir)
+
+            foreach(trialFile trialFiles
+
+                when(rexMatchp("\\.pwl$" trialFile)
+
+                    st1File = strcat(st1FreqDir "/" trialFile)
+                    st2File = strcat(st2FreqDir "/" trialFile)
+
+                    if(isFile(st2File) then
+
+                        ; Remove ".pwl" from trial filename.
+                        trialStem = substring(trialFile 1 difference(strlen(trialFile) 4))
+
+                        runName = strcat(freqDir "_" trialStem)
+                        runDir = strcat(outputBaseDir "/" runName)
+
+                        unless(isDir(runDir)
+                            system(strcat("mkdir -p " runDir))
+                        )
+
+                        resultsDir(runDir)
+
+                        ; Important:
+                        ; File paths need embedded quotation marks so Spectre
+                        ; receives them as string parameters.
+
+                        desVar("pwlFile_st1" strcat("\"" st1File "\""))
+                        desVar("pwlFile_st2" strcat("\"" st2File "\""))
+
+                        printf("============================================================\n")
+                        printf("Running: %s\n" runName)
+                        printf("  st_1 PWL: %s\n" st1File)
+                        printf("  st_2 PWL: %s\n" st2File)
+                        printf("  output:   %s\n" runDir)
+
+                        fprintf(manifestPort "%s,%s,%s,%s,%s,%s\n"
+                                runName freqDir trialFile st1File st2File runDir)
+
+                        ; ------------------------------------------------
+                        ; Run simulation
+                        ; ------------------------------------------------
+
+                        run()
+
+                        ; ------------------------------------------------
+                        ; Export current and voltage waveforms
+                        ; ------------------------------------------------
+
+                        selectResult('tran)
+
+                        iout_172 = i("/I172/Iout")
+                        iout_56  = i("/I56/Iout")
+
+                        vpre  = v("/vpre")
+                        vpre1 = v("/vpre1")
+
+                        ocnPrint(
+                            ?output strcat(runDir "/output_signals.txt")
+                            ?precision 10
+                            ?numSpaces 1
+                            iout_172
+                            iout_56
+                            vpre
+                            vpre1
+                        )
+
+                        printf("Finished: %s\n" runName)
+
+                    else
+
+                        warn("Skipping %s/%s because matching st_2 file is missing: %s\n"
+                             freqDir trialFile st2File)
+                    )
+                )
+            )
+
+        else
+
+            warn("Skipping frequency directory %s because it is missing in st_1 or st_2.\n"
+                 freqDir)
+        )
+    )
+)
+
+close(manifestPort)
+
+printf("============================================================\n")
+printf("Finished all batch simulations.\n")
+printf("Manifest written to: %s\n" manifestPath)
+printf("Output base directory: %s\n" outputBaseDir)
+printf("============================================================\n")
