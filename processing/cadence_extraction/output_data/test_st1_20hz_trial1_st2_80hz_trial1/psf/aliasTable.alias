@@ -1,0 +1,7 @@
+# ALIAS_TABLE_V01
+# Created at: Tue May 12 10:40:21 2026
+#
+# aliasSignalName, realSignalName(data)
+#
+"I56:Iout", "I56:1"
+"I172:Iout", "I172:1"
