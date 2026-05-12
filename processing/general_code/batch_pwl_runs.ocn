@@ -1,19 +1,21 @@
 ; ============================================================
 ; Batch OCEAN script
-; Cartesian product over all st_1 and st_2 PWL files
+; Mix st_1 and st_2 frequencies, but keep matching trials
 ;
-; For every:
-;     st_1/<freq>/<trial>.pwl
-; and every:
-;     st_2/<freq>/<trial>.pwl
+; Example included:
+;     st_1/1_hz/trial_1.pwl with st_2/100_hz/trial_1.pwl
 ;
-; run one simulation and export:
+; Example excluded:
+;     st_1/1_hz/trial_1.pwl with st_2/100_hz/trial_3.pwl
+;
+; Exports:
 ;     i("/I172/Iout")
 ;     i("/I56/Iout")
 ;     v("/vpre")
 ;     v("/vpre1")
 ;
-; By default, delete the PSF directory after exporting the text file.
+; By default, deletes the PSF directory after output_signals.txt
+; is written.
 ; ============================================================
 
 simulator('spectre)
@@ -28,7 +30,7 @@ design("sebastian_thesis_pilot" "dynapsetb1" "schematic")
 ; User options
 ; ------------------------------------------------------------
 
-; Set to t if you want to keep the full PSF simulation database.
+; Set to t if you want to keep full PSF simulation databases.
 ; Set to nil if you only want output_signals.txt.
 keepPsf = nil
 
@@ -46,7 +48,7 @@ st2BaseDir = strcat(pwlBaseDir "/st_2")
 outputBaseDir = strcat(baseRepoDir "/processing/cadence_extraction/output_data")
 
 unless(isDir(outputBaseDir)
-    system(strcat("mkdir -p " outputBaseDir))
+    system(strcat("mkdir -p \"" outputBaseDir "\""))
 )
 
 ; ------------------------------------------------------------
@@ -97,19 +99,7 @@ save('v "/vpre")
 save('v "/vpre1")
 
 ; ------------------------------------------------------------
-; Manifest file
-; ------------------------------------------------------------
-
-manifestPath = strcat(outputBaseDir "/run_manifest.csv")
-manifestPort = outfile(manifestPath "w")
-
-fprintf(
-    manifestPort
-    "run_name,st1_frequency,st1_trial,st1_file,st2_frequency,st2_trial,st2_file,run_dir,keep_psf\n"
-)
-
-; ------------------------------------------------------------
-; Basic sanity checks
+; Sanity checks
 ; ------------------------------------------------------------
 
 unless(isDir(st1BaseDir)
@@ -121,11 +111,82 @@ unless(isDir(st2BaseDir)
 )
 
 ; ------------------------------------------------------------
-; Main Cartesian-product batch loop
+; Get directory lists
 ; ------------------------------------------------------------
 
 st1FreqDirs = getDirFiles(st1BaseDir)
 st2FreqDirs = getDirFiles(st2BaseDir)
+
+; ------------------------------------------------------------
+; Pre-count total number of simulations
+; ------------------------------------------------------------
+; This lets us print a useful progress percentage.
+
+totalRuns = 0
+
+foreach(st1FreqDirName st1FreqDirs
+
+    when(st1FreqDirName != "." && st1FreqDirName != ".."
+
+        st1FreqDir = strcat(st1BaseDir "/" st1FreqDirName)
+
+        when(isDir(st1FreqDir)
+
+            foreach(st2FreqDirName st2FreqDirs
+
+                when(st2FreqDirName != "." && st2FreqDirName != ".."
+
+                    st2FreqDir = strcat(st2BaseDir "/" st2FreqDirName)
+
+                    when(isDir(st2FreqDir)
+
+                        st1TrialFiles = getDirFiles(st1FreqDir)
+
+                        foreach(trialFile st1TrialFiles
+
+                            when(rexMatchp("\\.pwl$" trialFile)
+
+                                st1File = strcat(st1FreqDir "/" trialFile)
+                                st2File = strcat(st2FreqDir "/" trialFile)
+
+                                when(isFile(st1File) && isFile(st2File)
+                                    totalRuns = totalRuns + 1
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
+)
+
+printf("============================================================\n")
+printf("Total simulations to run: %d\n" totalRuns)
+printf("Frequency mixing: enabled\n")
+printf("Trial mixing: disabled; only matching trial_N files are paired\n")
+printf("keepPsf: %L\n" keepPsf)
+printf("============================================================\n")
+
+when(totalRuns == 0
+    error("No valid st_1/st_2 matching-trial PWL combinations found.\n")
+)
+
+; ------------------------------------------------------------
+; Manifest file
+; ------------------------------------------------------------
+
+manifestPath = strcat(outputBaseDir "/run_manifest.csv")
+manifestPort = outfile(manifestPath "w")
+
+fprintf(
+    manifestPort
+    "run_index,total_runs,progress_percent,run_name,st1_frequency,st2_frequency,trial_file,st1_file,st2_file,run_dir,keep_psf\n"
+)
+
+; ------------------------------------------------------------
+; Main batch loop
+; ------------------------------------------------------------
 
 runCount = 0
 
@@ -137,154 +198,162 @@ foreach(st1FreqDirName st1FreqDirs
 
         when(isDir(st1FreqDir)
 
-            st1TrialFiles = getDirFiles(st1FreqDir)
+            foreach(st2FreqDirName st2FreqDirs
 
-            foreach(st1TrialFile st1TrialFiles
+                when(st2FreqDirName != "." && st2FreqDirName != ".."
 
-                when(rexMatchp("\\.pwl$" st1TrialFile)
+                    st2FreqDir = strcat(st2BaseDir "/" st2FreqDirName)
 
-                    st1File = strcat(st1FreqDir "/" st1TrialFile)
+                    when(isDir(st2FreqDir)
 
-                    when(isFile(st1File)
+                        st1TrialFiles = getDirFiles(st1FreqDir)
 
-                        ; Remove ".pwl" from st_1 trial filename.
-                        st1TrialStem = substring(
-                            st1TrialFile
-                            1
-                            difference(strlen(st1TrialFile) 4)
-                        )
+                        foreach(trialFile st1TrialFiles
 
-                        ; ------------------------------------------------
-                        ; Inner loop over all st_2 frequency/trial files
-                        ; ------------------------------------------------
+                            when(rexMatchp("\\.pwl$" trialFile)
 
-                        foreach(st2FreqDirName st2FreqDirs
+                                st1File = strcat(st1FreqDir "/" trialFile)
+                                st2File = strcat(st2FreqDir "/" trialFile)
 
-                            when(st2FreqDirName != "." && st2FreqDirName != ".."
+                                if(isFile(st1File) && isFile(st2File) then
 
-                                st2FreqDir = strcat(st2BaseDir "/" st2FreqDirName)
+                                    ; Remove ".pwl" from trial filename.
+                                    trialStem = substring(
+                                        trialFile
+                                        1
+                                        difference(strlen(trialFile) 4)
+                                    )
 
-                                when(isDir(st2FreqDir)
+                                    runCount = runCount + 1
 
-                                    st2TrialFiles = getDirFiles(st2FreqDir)
+                                    progressPercent = 100.0 * runCount / totalRuns
 
-                                    foreach(st2TrialFile st2TrialFiles
+                                    ; Example:
+                                    ; st1_1_hz__st2_100_hz__trial_1
+                                    runName = strcat(
+                                        "st1_"
+                                        st1FreqDirName
+                                        "__st2_"
+                                        st2FreqDirName
+                                        "__"
+                                        trialStem
+                                    )
 
-                                        when(rexMatchp("\\.pwl$" st2TrialFile)
+                                    runDir = strcat(outputBaseDir "/" runName)
 
-                                            st2File = strcat(st2FreqDir "/" st2TrialFile)
+                                    unless(isDir(runDir)
+                                        system(strcat("mkdir -p \"" runDir "\""))
+                                    )
 
-                                            when(isFile(st2File)
+                                    ; Send Spectre result database to this run-specific directory.
+                                    resultsDir(runDir)
 
-                                                ; Remove ".pwl" from st_2 trial filename.
-                                                st2TrialStem = substring(
-                                                    st2TrialFile
-                                                    1
-                                                    difference(strlen(st2TrialFile) 4)
-                                                )
+                                    ; ------------------------------------------------
+                                    ; Set PWL-file design variables
+                                    ; ------------------------------------------------
+                                    ; Important:
+                                    ; File paths need embedded quotation marks so Spectre
+                                    ; receives them as string parameters.
 
-                                                runCount = runCount + 1
+                                    desVar("pwlFile_st1" strcat("\"" st1File "\""))
+                                    desVar("pwlFile_st2" strcat("\"" st2File "\""))
 
-                                                ; Example:
-                                                ; st1_10_hz_trial_3__st2_100_hz_trial_1
-                                                runName = strcat(
-                                                    "st1_"
-                                                    st1FreqDirName
-                                                    "_"
-                                                    st1TrialStem
-                                                    "__st2_"
-                                                    st2FreqDirName
-                                                    "_"
-                                                    st2TrialStem
-                                                )
+                                    printf("============================================================\n")
+                                    printf(
+                                        "Progress: %d / %d  %.2f%%\n"
+                                        runCount
+                                        totalRuns
+                                        progressPercent
+                                    )
+                                    printf("Running: %s\n" runName)
+                                    printf("  st_1 PWL: %s\n" st1File)
+                                    printf("  st_2 PWL: %s\n" st2File)
+                                    printf("  output:   %s\n" runDir)
+                                    printf("  keepPsf:  %L\n" keepPsf)
 
-                                                runDir = strcat(outputBaseDir "/" runName)
+                                    fprintf(
+                                        manifestPort
+                                        "%d,%d,%.6f,%s,%s,%s,%s,%s,%s,%s,%L\n"
+                                        runCount
+                                        totalRuns
+                                        progressPercent
+                                        runName
+                                        st1FreqDirName
+                                        st2FreqDirName
+                                        trialFile
+                                        st1File
+                                        st2File
+                                        runDir
+                                        keepPsf
+                                    )
 
-                                                unless(isDir(runDir)
-                                                    system(strcat("mkdir -p " runDir))
-                                                )
+                                    ; ------------------------------------------------
+                                    ; Run simulation
+                                    ; ------------------------------------------------
 
-                                                ; Send Spectre result database to this run-specific directory.
-                                                resultsDir(runDir)
+                                    run()
 
-                                                ; ------------------------------------------------
-                                                ; Set PWL-file design variables
-                                                ; ------------------------------------------------
-                                                ; Important:
-                                                ; File paths need embedded quotation marks so Spectre
-                                                ; receives them as string parameters.
+                                    ; ------------------------------------------------
+                                    ; Export current and voltage waveforms
+                                    ; ------------------------------------------------
 
-                                                desVar("pwlFile_st1" strcat("\"" st1File "\""))
-                                                desVar("pwlFile_st2" strcat("\"" st2File "\""))
+                                    selectResult('tran)
 
-                                                printf("============================================================\n")
-                                                printf("Run %d: %s\n" runCount runName)
-                                                printf("  st_1 PWL: %s\n" st1File)
-                                                printf("  st_2 PWL: %s\n" st2File)
-                                                printf("  output:   %s\n" runDir)
-                                                printf("  keepPsf:  %L\n" keepPsf)
+                                    iout_172 = i("/I172/Iout")
+                                    iout_56  = i("/I56/Iout")
 
-                                                fprintf(
-                                                    manifestPort
-                                                    "%s,%s,%s,%s,%s,%s,%s,%s,%L\n"
-                                                    runName
-                                                    st1FreqDirName
-                                                    st1TrialFile
-                                                    st1File
-                                                    st2FreqDirName
-                                                    st2TrialFile
-                                                    st2File
-                                                    runDir
-                                                    keepPsf
-                                                )
+                                    vpre  = v("/vpre")
+                                    vpre1 = v("/vpre1")
 
-                                                ; ------------------------------------------------
-                                                ; Run simulation
-                                                ; ------------------------------------------------
+                                    ocnPrint(
+                                        ?output strcat(runDir "/output_signals.txt")
+                                        ?precision 10
+                                        ?numSpaces 1
+                                        iout_172
+                                        iout_56
+                                        vpre
+                                        vpre1
+                                    )
 
-                                                run()
+                                    ; ------------------------------------------------
+                                    ; Close results before deleting PSF
+                                    ; ------------------------------------------------
+                                    ; This avoids errors such as:
+                                    ;     rm: cannot remove '.../psf': Directory not empty
+                                    ;
+                                    ; Those can occur if OCEAN/Spectre still has PSF
+                                    ; files open when rm is called.
 
-                                                ; ------------------------------------------------
-                                                ; Export current and voltage waveforms
-                                                ; ------------------------------------------------
+                                    closeResults()
 
-                                                selectResult('tran)
+                                    ; ------------------------------------------------
+                                    ; Optionally delete PSF data
+                                    ; ------------------------------------------------
 
-                                                iout_172 = i("/I172/Iout")
-                                                iout_56  = i("/I56/Iout")
+                                    unless(keepPsf
 
-                                                vpre  = v("/vpre")
-                                                vpre1 = v("/vpre1")
+                                        psfDir = strcat(runDir "/psf")
 
-                                                ocnPrint(
-                                                    ?output strcat(runDir "/output_signals.txt")
-                                                    ?precision 10
-                                                    ?numSpaces 1
-                                                    iout_172
-                                                    iout_56
-                                                    vpre
-                                                    vpre1
-                                                )
+                                        when(isDir(psfDir)
+                                            printf("Deleting PSF directory: %s\n" psfDir)
+                                            system(strcat("rm -rf \"" psfDir "\""))
+                                        )
+                                    )
 
-                                                ; ------------------------------------------------
-                                                ; Optionally delete PSF data
-                                                ; ------------------------------------------------
-                                                ; PSF is needed temporarily for ocnPrint().
-                                                ; After output_signals.txt is written, it can be
-                                                ; deleted to reduce storage and transfer time.
+                                    printf("Finished: %s\n" runName)
 
-                                                unless(keepPsf
+                                else
 
-                                                    psfDir = strcat(runDir "/psf")
+                                    ; This is not necessarily an error.
+                                    ; It simply means the same trial file does not exist
+                                    ; in this st_2 frequency directory.
 
-                                                    when(isDir(psfDir)
-                                                        printf("Deleting PSF directory: %s\n" psfDir)
-                                                        system(strcat("rm -rf " psfDir))
-                                                    )
-                                                )
-
-                                                printf("Finished: %s\n" runName)
-                                            )
+                                    when(isFile(st1File) && !isFile(st2File)
+                                        warn(
+                                            "Skipping st1=%s with st2 frequency=%s because matching trial is missing: %s\n"
+                                            st1File
+                                            st2FreqDirName
+                                            st2File
                                         )
                                     )
                                 )
@@ -300,8 +369,8 @@ foreach(st1FreqDirName st1FreqDirs
 close(manifestPort)
 
 printf("============================================================\n")
-printf("Finished all Cartesian-product batch simulations.\n")
-printf("Total runs: %d\n" runCount)
+printf("Finished all simulations.\n")
+printf("Total completed runs: %d / %d\n" runCount totalRuns)
 printf("Manifest written to: %s\n" manifestPath)
 printf("Output base directory: %s\n" outputBaseDir)
 printf("keepPsf = %L\n" keepPsf)
