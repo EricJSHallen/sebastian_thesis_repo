@@ -1,6 +1,6 @@
 ; ============================================================
 ; Minimal OCEAN test script
-; Test one pair of PWL files and export transient outputs
+; Test one pair of PWL files and debug transient output names
 ; ============================================================
 
 simulator('spectre)
@@ -32,7 +32,6 @@ unless(isDir(runDir)
     system(strcat("mkdir -p " runDir))
 )
 
-; Send Spectre output data to this directory.
 resultsDir(runDir)
 
 ; ------------------------------------------------------------
@@ -42,11 +41,7 @@ resultsDir(runDir)
 analysis('tran ?stop "1s")
 
 ; ------------------------------------------------------------
-; Define ordinary design variables
-; ------------------------------------------------------------
-; These values are copied from the ADE design-variable list.
-; Dependent variables are assigned directly to avoid undefined
-; variable problems in the generated Spectre netlist.
+; Design variables
 ; ------------------------------------------------------------
 
 desVar("ml" 180n)
@@ -79,9 +74,6 @@ desVar("vmax" 1.8)
 ; ------------------------------------------------------------
 ; PWL design variables
 ; ------------------------------------------------------------
-; The actual Spectre parameter value must include quotation marks.
-; Therefore the file paths are wrapped with "\"" ... "\"".
-; ------------------------------------------------------------
 
 st1File = strcat(pwlBaseDir "/st_1/600_hz/trial_1.pwl")
 st2File = strcat(pwlBaseDir "/st_2/600_hz/trial_1.pwl")
@@ -103,14 +95,16 @@ printf("Using st_2 PWL file: %s\n" st2File)
 ; ------------------------------------------------------------
 ; Save signals
 ; ------------------------------------------------------------
-; For debugging, save everything. Once this works, replace this
-; with a narrower save statement.
+; During debugging, save broadly.
+; This makes it easier to determine the actual PSF waveform names.
 ; ------------------------------------------------------------
 
 save('all)
 
-; Later, after debugging, you can try something narrower like:
-; save("/I56/Iout" "/vpre1" "/vpre")
+; Also explicitly request the current expression shown in ADE.
+; This may or may not be the exact internal PSF name, but it is worth keeping.
+
+save('i "/I56/Iout")
 
 ; ------------------------------------------------------------
 ; Run simulation
@@ -119,64 +113,82 @@ save('all)
 run()
 
 ; ------------------------------------------------------------
-; Export selected transient waveforms
+; Inspect transient result
 ; ------------------------------------------------------------
 
 selectResult('tran)
 
-; Retrieve waveforms from transient results.
-; This is usually more robust than i("/I56/Iout") for saved signal
-; expressions such as those shown in ADE Outputs Setup.
+printf("Available results:\n")
+results()
 
-iout_56 = getData("/I56/Iout" ?result 'tran)
-vpre1   = getData("/vpre1"    ?result 'tran)
-vpre    = getData("/vpre"     ?result 'tran)
+printf("Available transient outputs:\n")
+outputs()
 
-; Check that the requested signals were actually found.
+; Save the list of transient outputs to a text file for inspection.
 
-unless(iout_56
-    error("Could not find transient waveform /I56/Iout. Check the saved signal name and Spectre results.\n")
-)
-
-unless(vpre1
-    printf("Warning: could not find transient waveform /vpre1.\n")
-)
-
-unless(vpre
-    printf("Warning: could not find transient waveform /vpre.\n")
-)
-
-; Export the current waveform.
+outputListFile = strcat(runDir "/available_tran_outputs.txt")
 
 ocnPrint(
-    ?output strcat(runDir "/output_currents.txt")
-    ?precision 10
-    ?numSpaces 1
-    iout_56
+    ?output outputListFile
+    outputs()
 )
 
-; Export voltage waveforms if they exist.
+printf("Wrote available transient outputs to: %s\n" outputListFile)
 
-when(vpre1
-    ocnPrint(
-        ?output strcat(runDir "/output_vpre1.txt")
-        ?precision 10
-        ?numSpaces 1
-        vpre1
-    )
+; ------------------------------------------------------------
+; Try several likely names for the current
+; ------------------------------------------------------------
+; Different Cadence/Spectre setups can expose terminal currents
+; with different path syntaxes. We test several common variants.
+; ------------------------------------------------------------
+
+iout_56 = nil
+
+when(iout_56 == nil
+    iout_56 = getData("/I56/Iout" ?result 'tran)
 )
 
-when(vpre
+when(iout_56 == nil
+    iout_56 = getData("I56:Iout" ?result 'tran)
+)
+
+when(iout_56 == nil
+    iout_56 = getData("/I56:Iout" ?result 'tran)
+)
+
+when(iout_56 == nil
+    iout_56 = getData("I56/Iout" ?result 'tran)
+)
+
+when(iout_56 == nil
+    iout_56 = i("/I56/Iout")
+)
+
+when(iout_56 == nil
+    iout_56 = i("I56:Iout")
+)
+
+; ------------------------------------------------------------
+; Export current if found
+; ------------------------------------------------------------
+
+if(iout_56 then
     ocnPrint(
-        ?output strcat(runDir "/output_vpre.txt")
+        ?output strcat(runDir "/output_currents.txt")
         ?precision 10
         ?numSpaces 1
-        vpre
+        iout_56
     )
+
+    printf("Exported current to: %s\n" strcat(runDir "/output_currents.txt"))
+
+else
+    printf("Could not find current waveform for /I56/Iout.\n")
+    printf("Check this file for the actual saved names:\n")
+    printf("%s\n" outputListFile)
+
+    error("Current waveform not found. Inspect available_tran_outputs.txt.\n")
 )
 
 printf("Finished test run.\n")
 printf("Results directory: %s\n" runDir)
-printf("Exported current: %s\n" strcat(runDir "/output_currents.txt"))
-printf("Exported vpre1:   %s\n" strcat(runDir "/output_vpre1.txt"))
-printf("Exported vpre:    %s\n" strcat(runDir "/output_vpre.txt"))
