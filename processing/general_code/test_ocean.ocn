@@ -82,8 +82,8 @@ desVar("vmax" 1.8)
 ; The actual Spectre parameter value must include quotation marks.
 ; That is why the strings are wrapped with "\"" ... "\"".
 
-st1File = strcat(pwlBaseDir "/st_1/200_hz/trial_1.pwl")
-st2File = strcat(pwlBaseDir "/st_2/200_hz/trial_1.pwl")
+st1File = strcat(pwlBaseDir "/st_1/600_hz/trial_1.pwl")
+st2File = strcat(pwlBaseDir "/st_2/600_hz/trial_1.pwl")
 
 unless(isFile(st1File)
     error("Cannot find st_1 PWL file: %s\n" st1File)
