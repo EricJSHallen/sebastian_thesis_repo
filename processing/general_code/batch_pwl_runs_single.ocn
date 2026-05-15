@@ -5,7 +5,7 @@ simulator('spectre)
 
 ; Design under test
 
-design("sebastian_thesis_pilot" "dynapsetb1" "schematic")
+design("sebastian_thesis_pilot" "synapsedualinputtb" "schematic")
 
 ; User options
 
