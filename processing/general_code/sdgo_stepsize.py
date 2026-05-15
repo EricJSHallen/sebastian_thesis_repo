@@ -17,10 +17,10 @@ output_root = Path(__file__).resolve().parent / "spike_train_output"
 
 num_spike_train_sets = 2      # Creates st_1, st_2, ..., st_n
 max_frequency_hz = 600         # Highest frequency directory to create, e.g. up to 600_hz
-step_size = 40                 # Frequency step size: 1 -> 1,2,3,...; 2 -> 1,3,5,...; 3 -> 1,4,7,...
+step_size = 80                 # Frequency step size: 1 -> 1,2,3,...; 2 -> 1,3,5,...; 3 -> 1,4,7,...
 trials_per_frequency = 1       # Creates trial_1.pwl, ..., trial_j.pwl
 
-total_time = 1.0              # seconds; use 1.0 s if you want exactly i spikes for i Hz
+total_time = 0.5              # seconds; use 1.0 s if you want exactly i spikes for i Hz
 pulse_height = 1.8            # volts
 pulse_width = 10e-6          # seconds; width of each spike pulse
 
