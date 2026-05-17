@@ -10,6 +10,10 @@ Simulations (i)
 4) figure out what parameters we want for the circuit, (analytically)
 5) how to use said 4) params to optimize W,L. 
 6) set up script, or program to optimize W,L and use provided outputs for base setting around which I can use a monte carlo for simulations.
+7) add randomness to voltage of input spike.
+8) make sure to use seed for next simulations for reproducible results
+9) generalize my programs to work for comparing n input synapses to 1 input synapse. 
+10) for 9) make a testbench with array of synapses, variable number that can be altered by .ocn script.
 
 Processing (ii)
 1) write a script that integrates the difference between what is expected and what is found between 1syn 2 input and (1syn 1 input)x2, make it generalised for n_syn, m_inputs
@@ -31,3 +35,7 @@ Literature(v)
 
 extras (vi)
 1) if possible switch uni computer to Ubuntu to make it easier to use, ask vincent
+
+questions(vii)
+1) why is there noise in my data after the first simultaneous spike? nevermind theres noise at every spike
+2) decrease noise by increasing spike magnitude.
