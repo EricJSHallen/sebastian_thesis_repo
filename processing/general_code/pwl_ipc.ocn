@@ -7,9 +7,20 @@ envOption('userCmdLineOption "++aps +mt=4")
 design("sebastian_thesis_pilot" "synapsedualinputtb" "schematic")
 
 
+; Include ADE-generated encrypted Spectre setup/model file.
+; This is a test to reproduce the model context used by a successful ADE run.
+
+adeModelFile = "/home/s5117909/simulation/synapsedualinputtb/spectre/schematic/netlist/ade_e.scs"
+
+unless(isFile(adeModelFile)
+    error("Cannot find ADE model/setup file: %s\n" adeModelFile)
+)
+
+printf("Using ADE model/setup file: %s\n" adeModelFile)
+
 modelFile(
     list(
-        list("/path/to/xp018_models.scs")
+        list(adeModelFile)
     )
 )
 
