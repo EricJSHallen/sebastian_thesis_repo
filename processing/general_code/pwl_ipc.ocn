@@ -6,6 +6,14 @@ envOption('userCmdLineOption "++aps +mt=4")
 
 design("sebastian_thesis_pilot" "synapsedualinputtb" "schematic")
 
+
+modelFile(
+    list(
+        list("/path/to/xp018_models.scs")
+    )
+)
+
+
 ; Model / PDK setup
 ;
 ; Do NOT include /home/s5117909/eda_env/xp018/xp018_combine.lib here.
