@@ -320,3 +320,14 @@ printf("Cases assigned to this process: %d\n" assignedRunCount)
 printf("Cases skipped by this process: %d\n" skippedRunCount)
 printf("Manifest written to: %s\n" manifestPath)
 printf("Output base directory: %s\n" outputBaseDir)
+
+; Exit automatically only for batch-launched OCEAN jobs.
+; This avoids leaving ocean -nograph processes alive after completion.
+; Do not set CAD_BATCH_EXIT=1 when using load(...) interactively in CIW.
+
+batchExitStr = getShellEnvVar("CAD_BATCH_EXIT")
+
+when(batchExitStr == "1"
+    printf("CAD_BATCH_EXIT=1, exiting OCEAN.\n")
+    exit()
+)
